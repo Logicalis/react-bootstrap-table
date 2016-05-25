@@ -733,7 +733,9 @@ class BootstrapTable extends Component {
       || insertRow
       || deleteRow
       || search
-      || this.props.exportCSV) {
+      || this.props.exportCSV
+      || this.props.externalTools
+      || this.props.pagination) {
       let columns;
       if (Array.isArray(children)) {
         columns = children.map(function(column) {
