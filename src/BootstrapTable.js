@@ -261,6 +261,8 @@ class BootstrapTable extends Component {
             onSelectAllRow={ this.handleSelectAllRow }
             bordered={ this.props.bordered }
             condensed={ this.props.condensed }
+            actionsColumn={ this.props.actionsColumn }
+            actionsColumnText={ this.props.actionsColumnText }
             isFiltered={ this.filter ? true : false }
             isSelectAll={ isSelectAll }>
             { this.props.children }
@@ -283,6 +285,8 @@ class BootstrapTable extends Component {
             onRowMouseOver={ this.handleRowMouseOver }
             onRowMouseOut={ this.handleRowMouseOut }
             onSelectRow={ this.handleSelectRow }
+            actionsColumn={ this.props.actionsColumn } 
+            actionCellRenderer={ this.props.actionCellRenderer }
             noDataText={ this.props.options.noDataText } />
         </div>
         { tableFilter }
@@ -887,6 +891,9 @@ BootstrapTable.propTypes = {
   hover: PropTypes.bool,
   condensed: PropTypes.bool,
   pagination: PropTypes.bool,
+  actionsColumn: PropTypes.bool,
+  actionsColumnText: PropTypes.string,
+  actionCellRenderer: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   selectRow: PropTypes.shape({
     mode: PropTypes.oneOf([

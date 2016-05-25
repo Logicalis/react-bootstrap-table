@@ -45,13 +45,26 @@ class TableHeader extends Component {
                   return React.cloneElement(elm, { key: i++, onSort, sort, sortIndicator });
                 })
               }
+              { this.renderActionsRowHeader() }
             </tr>
           </thead>
         </table>
       </div>
     );
   }
-
+  
+  renderActionsRowHeader() {
+    if (this.props.actionsColumn === true) {
+      return (
+          <th style={ { textAlign: 'center' } }>
+            {this.props.actionsColumnText || 'Actions'}
+          </th>
+      );
+    } else {
+      return null;
+    }
+  }
+  
   renderSelectRowHeader() {
     if (this.props.rowSelectType === Const.ROW_SELECT_SINGLE) {
       return (<SelectRowHeaderColumn />);
@@ -79,6 +92,8 @@ TableHeader.propTypes = {
   hideSelectColumn: PropTypes.bool,
   bordered: PropTypes.bool,
   condensed: PropTypes.bool,
+  actionsColumn: PropTypes.bool,
+  actionsColumnText: PropTypes.string,
   isFiltered: PropTypes.bool,
   isSelectAll: PropTypes.oneOf([ true, 'indeterminate', false ]),
   sortIndicator: PropTypes.bool

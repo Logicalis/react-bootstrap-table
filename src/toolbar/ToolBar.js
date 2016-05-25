@@ -237,13 +237,13 @@ class ToolBar extends Component {
 
     return (
       <div className='row'>
-        <div className='col-xs-12 col-sm-6 col-md-4 col-lg-4'>
+        <div className='col-xs-12 col-sm-4 col-md-4 col-lg-4'>
           { searchTextInput }
         </div>
-        <div className='col-xs-12 col-sm-6 col-md-4 col-lg-4'>
+        <div className='col-xs-12 col-sm-4 col-md-4 col-lg-4'>
           { this.props.pagination }
         </div>
-        <div className='col-xs-12 col-sm-6 col-md-4 col-lg-4'>
+        <div className='col-xs-12 col-sm-4 col-md-4 col-lg-4'>
           <div className="react-bs-table-tool-bar-external-tools">
             { exportCSV }
             { insertBtn }

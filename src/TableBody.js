@@ -97,6 +97,23 @@ class TableBody extends Component {
         }
       }, this);
 
+      if (this.props.actionsColumn === true) {
+        // add actions column
+        tableColumns.push(
+            <TableColumn key={ tableColumns.length }
+               dataAlign={ 'center' }
+               //className={  }
+               //columnTitle={  }
+               //cellEdit={ this.props.cellEdit }
+               //hidden={ column.hidden }
+               //onEdit={ this.handleEditCell }
+               //width={ column.width }
+            >
+              {this.props.actionCellRenderer && this.props.actionCellRenderer(data)}
+            </TableColumn>
+        );
+      }
+
       const selected = this.props.selectedRowKeys.indexOf(data[this.props.keyField]) !== -1;
       const selectRowColumn = isSelectRowDefined && !this.props.selectRow.hideSelectColumn ?
                               this.renderSelectRowColumn(selected) : null;
@@ -146,6 +163,7 @@ class TableBody extends Component {
 
   renderTableHeader(isSelectRowDefined) {
     let selectRowHeader = null;
+    let actionsRowHeader = null;
 
     if (isSelectRowDefined) {
       const style = {
@@ -156,6 +174,11 @@ class TableBody extends Component {
         selectRowHeader = (<col style={ style } key={ -1 }></col>);
       }
     }
+
+    if (this.props.actionsColumn === true) {
+      actionsRowHeader = (<col key={ this.props.columns.length }></col>)
+    }
+
     const theader = this.props.columns.map(function(column, i) {
       const width = column.width === null ? column.width : parseInt(column.width, 10);
       const style = {
@@ -170,7 +193,7 @@ class TableBody extends Component {
 
     return (
       <colgroup ref='header'>
-        { selectRowHeader }{ theader }
+        { selectRowHeader }{ theader }{ actionsRowHeader }
       </colgroup>
     );
   }
@@ -278,6 +301,8 @@ TableBody.propTypes = {
   bordered: PropTypes.bool,
   hover: PropTypes.bool,
   condensed: PropTypes.bool,
+  actionsColumn: PropTypes.bool,
+  actionCellRenderer: PropTypes.func,
   keyField: PropTypes.string,
   selectedRowKeys: PropTypes.array,
   onRowClick: PropTypes.func,
