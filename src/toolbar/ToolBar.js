@@ -237,6 +237,22 @@ class ToolBar extends Component {
 
     return (
       <div className='row'>
+        <div className='col-xs-12 col-sm-6 col-md-4 col-lg-4'>
+          { searchTextInput }
+        </div>
+        <div className='col-xs-12 col-sm-6 col-md-4 col-lg-4'>
+          { this.props.pagination }
+        </div>
+        <div className='col-xs-12 col-sm-6 col-md-4 col-lg-4'>
+          <div className="react-bs-table-tool-bar-external-tools">
+            { exportCSV }
+            { insertBtn }
+            { deleteBtn }
+            { showSelectedOnlyBtn }
+            { this.props.externalTools }
+          </div>
+        </div>
+        {/*
         <div className='col-xs-12 col-sm-6 col-md-6 col-lg-8'>
           <div className='btn-group btn-group-sm' role='group'>
             { exportCSV }
@@ -245,9 +261,7 @@ class ToolBar extends Component {
             { showSelectedOnlyBtn }
           </div>
         </div>
-        <div className='col-xs-12 col-sm-6 col-md-6 col-lg-4'>
-          { searchTextInput }
-        </div>
+         */}
         <Notifier ref='notifier' />
         { modal }
       </div>
@@ -377,7 +391,9 @@ ToolBar.propTypes = {
   saveText: PropTypes.string,
   closeText: PropTypes.string,
   clearSearch: PropTypes.bool,
-  ignoreEditable: PropTypes.bool
+  ignoreEditable: PropTypes.bool,
+  pagination: PropTypes.node, // <PaginationList> instance
+  externalTools: PropTypes.node // toolbar external content
 };
 
 ToolBar.defaultProps = {

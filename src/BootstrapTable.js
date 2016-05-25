@@ -237,7 +237,7 @@ class BootstrapTable extends Component {
     const columns = this.getColumnsDescription(this.props);
     const sortInfo = this.store.getSortInfo();
     const pagination = this.renderPagination();
-    const toolBar = this.renderToolBar();
+    const toolBar = this.renderToolBar(pagination);
     const tableFilter = this.renderTableFilter(columns);
     const isSelectAll = this.isSelectAll();
     let sortIndicator = this.props.options.sortIndicator;
@@ -726,7 +726,7 @@ class BootstrapTable extends Component {
     return null;
   }
 
-  renderToolBar() {
+  renderToolBar(pagination) {
     const { selectRow, insertRow, deleteRow, search, children } = this.props;
     const enableShowOnlySelected = selectRow && selectRow.showOnlySelected;
     if (enableShowOnlySelected
@@ -779,7 +779,10 @@ class BootstrapTable extends Component {
             onDropRow={ this.handleDropRow }
             onSearch={ this.handleSearch }
             onExportCSV={ this.handleExportCSV }
-            onShowOnlySelected={ this.handleShowOnlySelected }/>
+            onShowOnlySelected={ this.handleShowOnlySelected }
+            pagination={pagination}
+            externalTools={this.props.externalTools}
+          />
         </div>
       );
     } else {
@@ -915,6 +918,7 @@ BootstrapTable.propTypes = {
   bodyStyle: PropTypes.object,
   tableHeaderClass: PropTypes.string,
   tableBodyClass: PropTypes.string,
+  externalTools: PropTypes.node, // external tools
   options: PropTypes.shape({
     clearSearch: PropTypes.bool,
     sortName: PropTypes.string,
