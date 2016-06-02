@@ -103,7 +103,11 @@ ReactDOM.render(
                   insertRow={true} deleteRow={true} search={true} columnFilter={false} options={options}
                   externalTools={externalTools} actionsColumn={true} actionCellRenderer={actionCellRenderer}>
       <TableHeaderColumn dataField="id" dataAlign="center" dataSort={true} isKey={true}>Product ID</TableHeaderColumn>
-      <TableHeaderColumn dataField="name" width="200px" dataSort={true}>Product Name</TableHeaderColumn>
+      <TableHeaderColumn
+          dataField="name"
+          width="200px"
+          customSearchTextGetter={(name, user) => { return name.split('').reverse().join('') }}
+          dataSort={true}>Product Name</TableHeaderColumn>
       <TableHeaderColumn dataField="price" width="100px" dataFormat={priceFormatter} editable={false}>Product Price</TableHeaderColumn>
       <TableHeaderColumn dataField="supplierId" editable={true}>Supplier ID</TableHeaderColumn>
       <TableHeaderColumn dataField="discount" editable={false}>Discount(Percentage)</TableHeaderColumn>

@@ -456,8 +456,15 @@ export class TableDataStore {
         for (let i = 0, keysLength = keys.length; i < keysLength; i++) {
           const key = keys[i];
           if (this.colInfos[key] && row[key]) {
-            const { format, filterFormatted, formatExtraData, searchable } = this.colInfos[key];
-            let targetVal = row[key];
+            const { format, filterFormatted, formatExtraData, searchable, customSearchTextGetter } = this.colInfos[key];
+            let targetVal;
+
+            if (typeof customSearchTextGetter === 'function') {
+              targetVal = customSearchTextGetter(row[key], row);
+            } else {
+              targetVal = row[key];
+            }
+
             if (searchable) {
               if (filterFormatted && format) {
                 targetVal = format(targetVal, row, formatExtraData);

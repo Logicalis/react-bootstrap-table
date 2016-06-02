@@ -123,6 +123,7 @@ class BootstrapTable extends Component {
         format: column.props.dataFormat,
         formatExtraData: column.props.formatExtraData,
         filterFormatted: column.props.filterFormatted,
+        customSearchTextGetter: column.props.customSearchTextGetter,
         editable: column.props.editable,
         hidden: column.props.hidden,
         searchable: column.props.searchable,

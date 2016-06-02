@@ -614,6 +614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          format: column.props.dataFormat,
 	          formatExtraData: column.props.formatExtraData,
 	          filterFormatted: column.props.filterFormatted,
+	          customSearchTextGetter: column.props.customSearchTextGetter,
 	          editable: column.props.editable,
 	          hidden: column.props.hidden,
 	          searchable: column.props.searchable,
@@ -3145,7 +3146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * 'xa12' in that case. Resolve keys you want to use once at startup time, then
 	 * reuse those resolutions.
 	 */
-	var keyOf = function (oneKeyObj) {
+	var keyOf = function keyOf(oneKeyObj) {
 	  var key;
 	  for (key in oneKeyObj) {
 	    if (!oneKeyObj.hasOwnProperty(key)) {
@@ -5489,8 +5490,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var filterFormatted = _colInfos$key2.filterFormatted;
 	                var formatExtraData = _colInfos$key2.formatExtraData;
 	                var searchable = _colInfos$key2.searchable;
+	                var customSearchTextGetter = _colInfos$key2.customSearchTextGetter;
 
-	                var targetVal = row[key];
+	                var targetVal = undefined;
+
+	                if (typeof customSearchTextGetter === 'function') {
+	                  targetVal = customSearchTextGetter(row[key], row);
+	                } else {
+	                  targetVal = row[key];
+	                }
+
 	                if (searchable) {
 	                  if (filterFormatted && format) {
 	                    targetVal = format(targetVal, row, formatExtraData);
