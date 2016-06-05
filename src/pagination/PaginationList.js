@@ -62,12 +62,11 @@ class PaginationList extends Component {
     this.lastPage = this.props.pageStartIndex + this.totalPages - 1;
     const pageBtns = this.makePage();
     const pageListStyle = {
-      // float: 'right',
+      float: 'right',
       // override the margin-top defined in .pagination class in bootstrap.
       marginTop: '0px'
     };
 
-    /*
     const sizePerPageOptions = sizePerPageList.map((_sizePerPage) => {
       return (
         <li key={ _sizePerPage } role='presentation'>
@@ -77,24 +76,14 @@ class PaginationList extends Component {
         </li>
       );
     });
-    */
 
     const offset = Math.abs(Const.PAGE_START_INDEX - pageStartIndex);
-    /*
     const total = paginationShowsTotal ? <span>
       Showing rows { ((currPage - pageStartIndex) * sizePerPage) } to&nbsp;
       { Math.min((sizePerPage * (currPage + offset) - 1), dataSize) } of&nbsp;
       { dataSize }
     </span> : null;
-    */
 
-    return (
-        <ul className='pagination' style={ pageListStyle }>
-          { pageBtns }
-        </ul>
-    );
-
-    /*
     return (
       <div className='row' style={ { marginTop: 15 } }>
         {
@@ -136,7 +125,6 @@ class PaginationList extends Component {
         }
       </div>
     );
-    */
   }
 
   makePage() {

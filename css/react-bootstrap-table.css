@@ -26,20 +26,11 @@
 }
 
 .react-bs-table-pagination {
-  /*margin: 10px;*/
-  text-align: center;
-}
-
-.react-bs-table-pagination ul.pagination {
-  margin-bottom: 0;
+  margin: 10px;
 }
 
 .react-bs-table-tool-bar {
   margin: 10px 10px 0px 10px;
-}
-
-.react-bs-table-tool-bar-external-tools {
-  text-align: right;
 }
 
 .react-bs-container-header {
@@ -54,7 +45,7 @@
 }
 
 .table-bordered {
-    border: 0px;
+  border: 0px;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {

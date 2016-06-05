@@ -236,35 +236,22 @@ class ToolBar extends Component {
     const modal = this.props.enableInsert ? this.renderInsertRowModal() : null;
 
     return (
-      <div className='row'>
-        <div className='col-xs-12 col-sm-4 col-md-4 col-lg-4'>
-          { searchTextInput }
-        </div>
-        <div className='col-xs-12 col-sm-4 col-md-4 col-lg-4'>
-          { this.props.pagination }
-        </div>
-        <div className='col-xs-12 col-sm-4 col-md-4 col-lg-4'>
-          <div className='react-bs-table-tool-bar-external-tools'>
-            { exportCSV }
-            { insertBtn }
-            { deleteBtn }
-            { showSelectedOnlyBtn }
-            { this.props.externalTools }
+        <div className='row'>
+          <div className='col-xs-12 col-sm-6 col-md-6 col-lg-8'>
+            <div className='btn-group btn-group-sm' role='group'>
+              { exportCSV }
+              { insertBtn }
+              { deleteBtn }
+              { showSelectedOnlyBtn }
+              { this.props.externalTools }
+            </div>
           </div>
-        </div>
-        {/*
-        <div className='col-xs-12 col-sm-6 col-md-6 col-lg-8'>
-          <div className='btn-group btn-group-sm' role='group'>
-            { exportCSV }
-            { insertBtn }
-            { deleteBtn }
-            { showSelectedOnlyBtn }
+          <div className='col-xs-12 col-sm-6 col-md-6 col-lg-4'>
+            { searchTextInput }
           </div>
+          <Notifier ref='notifier' />
+          { modal }
         </div>
-         */}
-        <Notifier ref='notifier' />
-        { modal }
-      </div>
     );
   }
 

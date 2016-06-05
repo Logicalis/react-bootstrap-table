@@ -1814,12 +1814,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _TableColumn2['default'],
 	            { key: tableColumns.length,
 	              dataAlign: 'center'
-	              //className={  }
-	              //columnTitle={  }
-	              //cellEdit={ this.props.cellEdit }
-	              //hidden={ column.hidden }
-	              //onEdit={ this.handleEditCell }
-	              //width={ column.width }
+	              // className={  }
+	              // columnTitle={  }
+	              // cellEdit={ this.props.cellEdit }
+	              // hidden={ column.hidden }
+	              // onEdit={ this.handleEditCell }
+	              // width={ column.width }
 	            },
 	            this.props.actionCellRenderer && this.props.actionCellRenderer(data)
 	          ));
@@ -4024,6 +4024,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(PaginationList, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      var _props2 = this.props;
 	      var currPage = _props2.currPage;
 	      var dataSize = _props2.dataSize;
@@ -4036,81 +4038,99 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.lastPage = this.props.pageStartIndex + this.totalPages - 1;
 	      var pageBtns = this.makePage();
 	      var pageListStyle = {
-	        // float: 'right',
+	        float: 'right',
 	        // override the margin-top defined in .pagination class in bootstrap.
 	        marginTop: '0px'
 	      };
 
-	      /*
-	      const sizePerPageOptions = sizePerPageList.map((_sizePerPage) => {
-	        return (
-	          <li key={ _sizePerPage } role='presentation'>
-	            <a role='menuitem'
-	              tabIndex='-1' href='#'
-	              onClick={ this.changeSizePerPage }>{ _sizePerPage }</a>
-	          </li>
+	      var sizePerPageOptions = sizePerPageList.map(function (_sizePerPage) {
+	        return _react2['default'].createElement(
+	          'li',
+	          { key: _sizePerPage, role: 'presentation' },
+	          _react2['default'].createElement(
+	            'a',
+	            { role: 'menuitem',
+	              tabIndex: '-1', href: '#',
+	              onClick: _this2.changeSizePerPage },
+	            _sizePerPage
+	          )
 	        );
 	      });
-	      */
 
 	      var offset = Math.abs(_Const2['default'].PAGE_START_INDEX - pageStartIndex);
-	      /*
-	      const total = paginationShowsTotal ? <span>
-	        Showing rows { ((currPage - pageStartIndex) * sizePerPage) } to&nbsp;
-	        { Math.min((sizePerPage * (currPage + offset) - 1), dataSize) } of&nbsp;
-	        { dataSize }
-	      </span> : null;
-	      */
+	      var total = paginationShowsTotal ? _react2['default'].createElement(
+	        'span',
+	        null,
+	        'Showing rows ',
+	        (currPage - pageStartIndex) * sizePerPage,
+	        ' to ',
+	        Math.min(sizePerPage * (currPage + offset) - 1, dataSize),
+	        ' of ',
+	        dataSize
+	      ) : null;
 
 	      return _react2['default'].createElement(
-	        'ul',
-	        { className: 'pagination', style: pageListStyle },
-	        pageBtns
+	        'div',
+	        { className: 'row', style: { marginTop: 15 } },
+	        sizePerPageList.length > 1 ? _react2['default'].createElement(
+	          'div',
+	          null,
+	          _react2['default'].createElement(
+	            'div',
+	            { className: 'col-md-6' },
+	            total,
+	            ' ',
+	            _react2['default'].createElement(
+	              'span',
+	              { className: 'dropdown' },
+	              _react2['default'].createElement(
+	                'button',
+	                { className: 'btn btn-default dropdown-toggle',
+	                  type: 'button', id: 'pageDropDown', 'data-toggle': 'dropdown',
+	                  'aria-expanded': 'true' },
+	                sizePerPage,
+	                _react2['default'].createElement(
+	                  'span',
+	                  null,
+	                  ' ',
+	                  _react2['default'].createElement('span', { className: 'caret' })
+	                )
+	              ),
+	              _react2['default'].createElement(
+	                'ul',
+	                { className: 'dropdown-menu', role: 'menu', 'aria-labelledby': 'pageDropDown' },
+	                sizePerPageOptions
+	              )
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            'div',
+	            { className: 'col-md-6' },
+	            _react2['default'].createElement(
+	              'ul',
+	              { className: 'pagination', style: pageListStyle },
+	              pageBtns
+	            )
+	          )
+	        ) : _react2['default'].createElement(
+	          'div',
+	          null,
+	          _react2['default'].createElement(
+	            'div',
+	            { className: 'col-md-6' },
+	            total
+	          ),
+	          _react2['default'].createElement(
+	            'div',
+	            { className: 'col-md-6' },
+	            _react2['default'].createElement(
+	              'ul',
+	              { className: 'pagination', style: pageListStyle },
+	              pageBtns
+	            )
+	          )
+	        )
 	      );
-
-	      /*
-	      return (
-	        <div className='row' style={ { marginTop: 15 } }>
-	          {
-	            sizePerPageList.length > 1
-	            ? <div>
-	                <div className='col-md-6'>
-	                  { total }{ ' ' }
-	                  <span className='dropdown'>
-	                    <button className='btn btn-default dropdown-toggle'
-	                      type='button' id='pageDropDown' data-toggle='dropdown'
-	                      aria-expanded='true'>
-	                      { sizePerPage }
-	                      <span>
-	                        { ' ' }
-	                        <span className='caret'/>
-	                      </span>
-	                    </button>
-	                    <ul className='dropdown-menu' role='menu' aria-labelledby='pageDropDown'>
-	                      { sizePerPageOptions }
-	                    </ul>
-	                  </span>
-	                </div>
-	                <div className='col-md-6'>
-	                  <ul className='pagination' style={ pageListStyle }>
-	                    { pageBtns }
-	                  </ul>
-	                </div>
-	              </div>
-	            : <div>
-	                <div className='col-md-6'>
-	                  { total }
-	                </div>
-	                <div className='col-md-6'>
-	                  <ul className='pagination' style={ pageListStyle }>
-	                    { pageBtns }
-	                  </ul>
-	                </div>
-	              </div>
-	          }
-	        </div>
-	      );
-	      */
 	    }
 	  }, {
 	    key: 'makePage',
@@ -4586,26 +4606,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { className: 'row' },
 	        _react2['default'].createElement(
 	          'div',
-	          { className: 'col-xs-12 col-sm-4 col-md-4 col-lg-4' },
-	          searchTextInput
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'col-xs-12 col-sm-4 col-md-4 col-lg-4' },
-	          this.props.pagination
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'col-xs-12 col-sm-4 col-md-4 col-lg-4' },
+	          { className: 'col-xs-12 col-sm-6 col-md-6 col-lg-8' },
 	          _react2['default'].createElement(
 	            'div',
-	            { className: 'react-bs-table-tool-bar-external-tools' },
+	            { className: 'btn-group btn-group-sm', role: 'group' },
 	            exportCSV,
 	            insertBtn,
 	            deleteBtn,
 	            showSelectedOnlyBtn,
 	            this.props.externalTools
 	          )
+	        ),
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'col-xs-12 col-sm-6 col-md-6 col-lg-4' },
+	          searchTextInput
 	        ),
 	        _react2['default'].createElement(_NotificationJs2['default'], { ref: 'notifier' }),
 	        modal
@@ -4802,16 +4817,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = ToolBar;
 	module.exports = exports['default'];
-	/*
-	<div className='col-xs-12 col-sm-6 col-md-6 col-lg-8'>
-	 <div className='btn-group btn-group-sm' role='group'>
-	   { exportCSV }
-	   { insertBtn }
-	   { deleteBtn }
-	   { showSelectedOnlyBtn }
-	 </div>
-	</div>
-	*/
 
 /***/ },
 /* 32 */

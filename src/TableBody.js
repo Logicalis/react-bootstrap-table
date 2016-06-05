@@ -102,14 +102,14 @@ class TableBody extends Component {
         tableColumns.push(
             <TableColumn key={ tableColumns.length }
                dataAlign={ 'center' }
-               //className={  }
-               //columnTitle={  }
-               //cellEdit={ this.props.cellEdit }
-               //hidden={ column.hidden }
-               //onEdit={ this.handleEditCell }
-               //width={ column.width }
+               // className={  }
+               // columnTitle={  }
+               // cellEdit={ this.props.cellEdit }
+               // hidden={ column.hidden }
+               // onEdit={ this.handleEditCell }
+               // width={ column.width }
             >
-              {this.props.actionCellRenderer && this.props.actionCellRenderer(data)}
+              { this.props.actionCellRenderer && this.props.actionCellRenderer(data) }
             </TableColumn>
         );
       }
@@ -176,7 +176,7 @@ class TableBody extends Component {
     }
 
     if (this.props.actionsColumn === true) {
-      actionsRowHeader = (<col key={ this.props.columns.length }></col>)
+      actionsRowHeader = (<col key={ this.props.columns.length }></col>);
     }
 
     const theader = this.props.columns.map(function(column, i) {
