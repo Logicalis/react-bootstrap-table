@@ -449,37 +449,46 @@ export class TableDataStore {
 
       this.filteredData = source.filter( row => {
         const keys = Object.keys(row);
-        let valid = false;
         // for loops are ugly, but performance matters here.
         // And you cant break from a forEach.
         // http://jsperf.com/for-vs-foreach/66
         for (let i = 0, keysLength = keys.length; i < keysLength; i++) {
           const key = keys[i];
-          if (this.colInfos[key] && row[key]) {
-            const { format, filterFormatted, formatExtraData, searchable, customSearchTextGetter } = this.colInfos[key];
-            let targetVal;
-
-            if (typeof customSearchTextGetter === 'function') {
-              targetVal = customSearchTextGetter(row[key], row);
-            } else {
-              targetVal = row[key];
-            }
+          if (this.colInfos[key] && row[key] !== undefined) {
+            const { format, filterFormatted, formatExtraData, searchable, customSearchTextGetter, customSearchHandler } = this.colInfos[key];
+            let targetVal = row[key];
 
             if (searchable) {
+
+              // custom text getter
+              if (typeof customSearchTextGetter === 'function') {
+                targetVal = customSearchTextGetter(row[key], row);
+              }
+
+              /*
               if (filterFormatted && format) {
                 targetVal = format(targetVal, row, formatExtraData);
               }
-              for (let j = 0, textLength = searchTextArray.length; j < textLength; j++) {
-                const filterVal = searchTextArray[j].toLowerCase();
-                if (targetVal.toString().toLowerCase().indexOf(filterVal) !== -1) {
-                  valid = true;
-                  break;
+              */
+
+              // custom search handler
+              if (typeof customSearchHandler === 'function') {
+                if (customSearchHandler(searchTextArray, targetVal, row[key], row) === true) {
+                  return true;
+                }
+              } else {
+                // default text handler
+                for (let j = 0, textLength = searchTextArray.length; j < textLength; j++) {
+                  const filterVal = searchTextArray[j].toLowerCase();
+                  if (targetVal.toString().toLowerCase().indexOf(filterVal) !== -1) {
+                    return true;
+                  }
                 }
               }
             }
           }
         }
-        return valid;
+        return false;
       });
       this.isOnFilter = true;
     }

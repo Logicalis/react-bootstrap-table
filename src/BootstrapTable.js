@@ -124,6 +124,7 @@ class BootstrapTable extends Component {
         formatExtraData: column.props.formatExtraData,
         filterFormatted: column.props.filterFormatted,
         customSearchTextGetter: column.props.customSearchTextGetter,
+        customSearchHandler: column.props.customSearchHandler,
         editable: column.props.editable,
         hidden: column.props.hidden,
         searchable: column.props.searchable,
@@ -160,10 +161,19 @@ class BootstrapTable extends Component {
       const sizePerPage = options.sizePerPage || this.state.sizePerPage;
 
       // #125
+      /*
       if (!options.page &&
         page >= Math.ceil(nextProps.data.length / sizePerPage)) {
         page = 1;
       }
+      */
+
+      // changed by vhiroki
+      if (!options.page &&
+          page > Math.ceil(nextProps.data.length / sizePerPage)) {
+        page = 1;
+      }
+
       const sortInfo = this.store.getSortInfo();
       const sortField = options.sortName || (sortInfo ? sortInfo.sortField : undefined);
       const sortOrder = options.sortOrder || (sortInfo ? sortInfo.order : undefined);

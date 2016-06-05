@@ -615,6 +615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          formatExtraData: column.props.formatExtraData,
 	          filterFormatted: column.props.filterFormatted,
 	          customSearchTextGetter: column.props.customSearchTextGetter,
+	          customSearchHandler: column.props.customSearchHandler,
 	          editable: column.props.editable,
 	          hidden: column.props.hidden,
 	          searchable: column.props.searchable,
@@ -653,9 +654,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sizePerPage = options.sizePerPage || this.state.sizePerPage;
 
 	        // #125
-	        if (!options.page && page >= Math.ceil(nextProps.data.length / sizePerPage)) {
+	        /*
+	        if (!options.page &&
+	          page >= Math.ceil(nextProps.data.length / sizePerPage)) {
 	          page = 1;
 	        }
+	        */
+
+	        // changed by vhiroki
+	        if (!options.page && page > Math.ceil(nextProps.data.length / sizePerPage)) {
+	          page = 1;
+	        }
+
 	        var sortInfo = this.store.getSortInfo();
 	        var sortField = options.sortName || (sortInfo ? sortInfo.sortField : undefined);
 	        var sortOrder = options.sortOrder || (sortInfo ? sortInfo.order : undefined);
@@ -5478,43 +5488,53 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          _this4.filteredData = source.filter(function (row) {
 	            var keys = Object.keys(row);
-	            var valid = false;
 	            // for loops are ugly, but performance matters here.
 	            // And you cant break from a forEach.
 	            // http://jsperf.com/for-vs-foreach/66
 	            for (var i = 0, keysLength = keys.length; i < keysLength; i++) {
 	              var key = keys[i];
-	              if (_this4.colInfos[key] && row[key]) {
+	              if (_this4.colInfos[key] && row[key] !== undefined) {
 	                var _colInfos$key2 = _this4.colInfos[key];
 	                var format = _colInfos$key2.format;
 	                var filterFormatted = _colInfos$key2.filterFormatted;
 	                var formatExtraData = _colInfos$key2.formatExtraData;
 	                var searchable = _colInfos$key2.searchable;
 	                var customSearchTextGetter = _colInfos$key2.customSearchTextGetter;
+	                var customSearchHandler = _colInfos$key2.customSearchHandler;
 
-	                var targetVal = undefined;
-
-	                if (typeof customSearchTextGetter === 'function') {
-	                  targetVal = customSearchTextGetter(row[key], row);
-	                } else {
-	                  targetVal = row[key];
-	                }
+	                var targetVal = row[key];
 
 	                if (searchable) {
+
+	                  // custom text getter
+	                  if (typeof customSearchTextGetter === 'function') {
+	                    targetVal = customSearchTextGetter(row[key], row);
+	                  }
+
+	                  /*
 	                  if (filterFormatted && format) {
 	                    targetVal = format(targetVal, row, formatExtraData);
 	                  }
-	                  for (var j = 0, textLength = searchTextArray.length; j < textLength; j++) {
-	                    var filterVal = searchTextArray[j].toLowerCase();
-	                    if (targetVal.toString().toLowerCase().indexOf(filterVal) !== -1) {
-	                      valid = true;
-	                      break;
+	                  */
+
+	                  // custom search handler
+	                  if (typeof customSearchHandler === 'function') {
+	                    if (customSearchHandler(searchTextArray, targetVal, row[key], row) === true) {
+	                      return true;
+	                    }
+	                  } else {
+	                    // default text handler
+	                    for (var j = 0, textLength = searchTextArray.length; j < textLength; j++) {
+	                      var filterVal = searchTextArray[j].toLowerCase();
+	                      if (targetVal.toString().toLowerCase().indexOf(filterVal) !== -1) {
+	                        return true;
+	                      }
 	                    }
 	                  }
 	                }
 	              }
 	            }
-	            return valid;
+	            return false;
 	          });
 	          _this4.isOnFilter = true;
 	        })();
