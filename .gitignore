@@ -6,4 +6,6 @@ node_modules
 *.idea
 *.iml
 lib/
+css/*.min.css
+demo/demo.bundle.js
 npm-debug.log
