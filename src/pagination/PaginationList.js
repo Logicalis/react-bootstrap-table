@@ -55,7 +55,8 @@ class PaginationList extends Component {
       sizePerPage,
       sizePerPageList,
       paginationShowsTotal,
-      pageStartIndex
+      pageStartIndex,
+      hideSizePerPage
     } = this.props;
 
     this.totalPages = Math.ceil(dataSize / sizePerPage);
@@ -78,11 +79,19 @@ class PaginationList extends Component {
     });
 
     const offset = Math.abs(Const.PAGE_START_INDEX - pageStartIndex);
-    const total = paginationShowsTotal ? <span>
-      Showing rows { ((currPage - pageStartIndex) * sizePerPage) } to&nbsp;
-      { Math.min((sizePerPage * (currPage + offset) - 1), dataSize) } of&nbsp;
-      { dataSize }
+    const start = ((currPage - pageStartIndex) * sizePerPage);
+    const to = Math.min((sizePerPage * (currPage + offset) - 1), dataSize);
+    let total = paginationShowsTotal ? <span>
+      Showing rows { start } to&nbsp;{ to } of&nbsp;{ dataSize }
     </span> : null;
+
+    if (typeof paginationShowsTotal === 'function') {
+      total = paginationShowsTotal(start, to, dataSize);
+    }
+
+    const dropDownStyle = {
+      visibility: hideSizePerPage ? 'hidden' : 'visible'
+    };
 
     return (
       <div className='row' style={ { marginTop: 15 } }>
@@ -91,7 +100,7 @@ class PaginationList extends Component {
           ? <div>
               <div className='col-md-6'>
                 { total }{ ' ' }
-                <span className='dropdown'>
+                <span className='dropdown' style={ dropDownStyle }>
                   <button className='btn btn-default dropdown-toggle'
                     type='button' id='pageDropDown' data-toggle='dropdown'
                     aria-expanded='true'>
@@ -158,6 +167,7 @@ class PaginationList extends Component {
   getPages() {
     let pages;
     let endPage = this.totalPages;
+    if (endPage <= 0) return [];
     let startPage = Math.max(
       this.props.currPage - Math.floor(this.props.paginationSize / 2),
       this.props.pageStartIndex
@@ -202,7 +212,8 @@ PaginationList.propTypes = {
   remote: PropTypes.bool,
   onSizePerPageList: PropTypes.func,
   prePage: PropTypes.string,
-  pageStartIndex: PropTypes.number
+  pageStartIndex: PropTypes.number,
+  hideSizePerPage: PropTypes.bool
 };
 
 PaginationList.defaultProps = {

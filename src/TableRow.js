@@ -1,3 +1,4 @@
+import classSet from 'classnames';
 import React, { Component, PropTypes } from 'react';
 
 class TableRow extends Component {
@@ -12,10 +13,11 @@ class TableRow extends Component {
         e.target.tagName !== 'SELECT' &&
         e.target.tagName !== 'TEXTAREA') {
       const rowIndex = e.currentTarget.rowIndex + 1;
-      if (this.props.selectRow) {
-        if (this.props.selectRow.clickToSelect) {
-          this.props.onSelectRow(rowIndex, !this.props.isSelected, e);
-        } else if (this.props.selectRow.clickToSelectAndEditCell) {
+      const { selectRow, unselectableRow, isSelected, onSelectRow } = this.props;
+      if (selectRow) {
+        if (selectRow.clickToSelect && !unselectableRow) {
+          onSelectRow(rowIndex, !isSelected, e);
+        } else if (selectRow.clickToSelectAndEditCell && !unselectableRow) {
           this.clickNum++;
           /** if clickToSelectAndEditCell is enabled,
            *  there should be a delay to prevent a selection changed when
@@ -23,7 +25,7 @@ class TableRow extends Component {
           **/
           setTimeout(() => {
             if (this.clickNum === 1) {
-              this.props.onSelectRow(rowIndex, !this.props.isSelected, e);
+              onSelectRow(rowIndex, !isSelected, e);
             }
             this.clickNum = 0;
           }, 200);
@@ -51,9 +53,10 @@ class TableRow extends Component {
       style: {
         backgroundColor: this.props.isSelected ? this.props.selectRow.bgColor : null
       },
-      className: (
-        this.props.isSelected && this.props.selectRow.className ?
-        this.props.selectRow.className : '') + (this.props.className || '')
+      className: classSet(
+        this.props.isSelected ? this.props.selectRow.className : null,
+        this.props.className
+      )
     };
 
     if (this.props.selectRow && (this.props.selectRow.clickToSelect ||
@@ -77,7 +80,8 @@ TableRow.propTypes = {
   onRowClick: PropTypes.func,
   onSelectRow: PropTypes.func,
   onRowMouseOut: PropTypes.func,
-  onRowMouseOver: PropTypes.func
+  onRowMouseOver: PropTypes.func,
+  unselectableRow: PropTypes.bool
 };
 TableRow.defaultProps = {
   onRowClick: undefined

@@ -19,18 +19,19 @@ function addProducts(quantity) {
 
 addProducts(5);
 
-export default class ExportCSVTable extends React.Component {
+const selectRowProp = {
+  mode: 'checkbox',
+  clickToSelect: true,
+  unselectable: [ 1, 3 ] // give rowkeys for unselectable row
+};
 
-  csvFormatter(cell) {
-    return cell + ' USD';
-  }
-
+export default class UnSelectableTable extends React.Component {
   render() {
     return (
-      <BootstrapTable data={ products } exportCSV={ true }>
+      <BootstrapTable data={ products } selectRow={ selectRowProp }>
           <TableHeaderColumn dataField='id' isKey={ true }>Product ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name' csvHeader='product-name'>Product Name</TableHeaderColumn>
-          <TableHeaderColumn dataField='price' csvFormat={ this.csvFormatter }>Product Price</TableHeaderColumn>
+          <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
       </BootstrapTable>
     );
   }

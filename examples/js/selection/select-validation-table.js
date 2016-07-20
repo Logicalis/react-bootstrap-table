@@ -2,6 +2,7 @@
 /* eslint no-alert: 0 */
 /* eslint guard-for-in: 0 */
 /* eslint no-console: 0 */
+/* eslint no-unused-vars: 0 */
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
@@ -23,23 +24,16 @@ function addProducts(quantity) {
 addProducts(5);
 
 function onRowSelect(row, isSelected, e) {
-  let rowStr = '';
-  for (const prop in row) {
-    rowStr += prop + ': "' + row[prop] + '"';
+  if (isSelected && row.id >= 3) {
+    alert('The selection only work on key which less than 3');
+    return false;
   }
-  console.log(e);
-  alert(`is selected: ${isSelected}, ${rowStr}`);
 }
 
 function onSelectAll(isSelected, rows) {
-  alert(`is select all: ${isSelected}`);
   if (isSelected) {
-    alert('Current display and selected data: ');
-  } else {
-    alert('unselect rows: ');
-  }
-  for (let i = 0; i < rows.length; i++) {
-    alert(rows[i].id);
+    alert('The selection only work on key which less than 3');
+    return products.map(p => p.id).filter(id => id < 3);
   }
 }
 
@@ -50,7 +44,7 @@ const selectRowProp = {
   onSelectAll: onSelectAll
 };
 
-export default class SelectHookTable extends React.Component {
+export default class SelectValidationTable extends React.Component {
   render() {
     return (
       <BootstrapTable data={ products } selectRow={ selectRowProp }>

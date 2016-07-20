@@ -36,12 +36,16 @@ class BootstrapTable extends Component {
       const copy = this.props.selectRow.selected.slice();
       this.store.setSelectedRowKey(copy);
     }
+    let currPage = Const.PAGE_START_INDEX;
+    if (typeof this.props.options.page !== 'undefined') {
+      currPage = this.props.options.page;
+    } else if (typeof this.props.options.pageStartIndex !== 'undefined') {
+      currPage = this.props.options.pageStartIndex;
+    }
 
     this.state = {
       data: this.getTableData(),
-      currPage: this.props.options.page ||
-                this.props.options.pageStartIndex ||
-                Const.PAGE_START_INDEX,
+      currPage: currPage,
       sizePerPage: this.props.options.sizePerPage || Const.SIZE_PER_PAGE_LIST[0],
       selectedRowKeys: this.store.getSelectedRowKeys()
     };
@@ -126,6 +130,7 @@ class BootstrapTable extends Component {
         customSearchTextGetter: column.props.customSearchTextGetter,
         editable: column.props.editable,
         hidden: column.props.hidden,
+        hiddenOnInsert: column.props.hiddenOnInsert,
         searchable: column.props.searchable,
         className: column.props.columnClassName,
         columnTitle: column.props.columnTitle,
@@ -133,6 +138,7 @@ class BootstrapTable extends Component {
         text: column.props.children,
         sortFunc: column.props.sortFunc,
         sortFuncExtraData: column.props.sortFuncExtraData,
+        export: column.props.export,
         index: i
       };
     });
@@ -144,11 +150,15 @@ class BootstrapTable extends Component {
 
     this.store.setData(nextProps.data.slice());
 
-    let page;
-    if (options.page != null) {
+    // from #481
+    let page = this.state.currPage;
+    if (this.props.options.page !== options.page) {
       page = options.page;
-    } else {
-      page = this.state.currPage;
+    }
+    // from #481
+    let sizePerPage = this.state.sizePerPage;
+    if (this.props.options.sizePerPage !== options.sizePerPage) {
+      sizePerPage = options.sizePerPage;
     }
 
     if (this.isRemoteDataSource()) {
@@ -157,11 +167,9 @@ class BootstrapTable extends Component {
         currPage: page
       });
     } else {
-      const sizePerPage = options.sizePerPage || this.state.sizePerPage;
-
       // #125
       if (!options.page &&
-        page >= Math.ceil(nextProps.data.length / sizePerPage)) {
+        page > Math.ceil(nextProps.data.length / sizePerPage)) {
         page = 1;
       }
       const sortInfo = this.store.getSortInfo();
@@ -399,16 +407,26 @@ class BootstrapTable extends Component {
 
   handleSelectAllRow = e => {
     const isSelected = e.currentTarget.checked;
+    const keyField = this.store.getKeyField();
+    const { selectRow: { onSelectAll, unselectable } } = this.props;
     let selectedRowKeys = [];
     let result = true;
-    if (this.props.selectRow.onSelectAll) {
+    let rows = this.store.get();
+
+    if (isSelected && unselectable && unselectable.length > 0) {
+      rows = rows.filter(r => unselectable.indexOf(r[keyField]) === -1);
+    }
+
+    if (onSelectAll) {
       result = this.props.selectRow.onSelectAll(isSelected,
-        isSelected ? this.store.get() : []);
+        isSelected ? rows : this.store.getRowByKey(this.state.selectedRowKeys));
     }
 
     if (typeof result == 'undefined' || result !== false) {
       if (isSelected) {
-        selectedRowKeys = this.store.getAllRowkey();
+        selectedRowKeys = Array.isArray(result) ?
+          result :
+          rows.map(r => r[keyField]);
       }
 
       this.store.setSelectedRowKey(selectedRowKeys);
@@ -526,6 +544,10 @@ class BootstrapTable extends Component {
     return this.state.currPage;
   }
 
+  getTableDataIgnorePaging() {
+    return this.store.getCurrentDisplayData();
+  }
+
   getPageByRowKey = rowKey => {
     const { sizePerPage } = this.state;
     const currentData = this.store.getCurrentDisplayData();
@@ -546,7 +568,7 @@ class BootstrapTable extends Component {
         this.props.options.handleConfirmDeleteRow(() => {
           this.deleteRow(dropRowKeys);
         }, dropRowKeys);
-      } else if (confirm('Are you sure want delete?')) {
+      } else if (confirm('Are you sure you want to delete?')) {
         this.deleteRow(dropRowKeys);
       }
     }
@@ -645,10 +667,14 @@ class BootstrapTable extends Component {
 
     const keys = [];
     this.props.children.map(function(column) {
-      if (column.props.hidden === false) {
+      console.log(column.props.export);
+      if (column.props.export === true ||
+        (typeof column.props.export === 'undefined' &&
+        column.props.hidden === false)) {
         keys.push({
           field: column.props.dataField,
-          format: column.props.csvFormat
+          format: column.props.csvFormat,
+          header: column.props.csvHeader || column.props.dataField
         });
       }
     });
@@ -707,6 +733,8 @@ class BootstrapTable extends Component {
         dataSize = this.store.getDataNum();
       }
       const { options } = this.props;
+      if (Math.ceil(dataSize / this.state.sizePerPage) <= 1 &&
+        this.props.ignoreSinglePage) return null;
       return (
         <div className='react-bs-table-pagination'>
           <PaginationList
@@ -724,7 +752,8 @@ class BootstrapTable extends Component {
             prePage={ options.prePage || Const.PRE_PAGE }
             nextPage={ options.nextPage || Const.NEXT_PAGE }
             firstPage={ options.firstPage || Const.FIRST_PAGE }
-            lastPage={ options.lastPage || Const.LAST_PAGE } />
+            lastPage={ options.lastPage || Const.LAST_PAGE }
+            hideSizePerPage={ options.hideSizePerPage }/>
         </div>
       );
     }
@@ -748,6 +777,7 @@ class BootstrapTable extends Component {
           return {
             name: props.children,
             field: props.dataField,
+            hiddenOnInsert: props.hiddenOnInsert,
             // when you want same auto generate value and not allow edit, example ID field
             autoValue: props.autoValue || false,
             // for create editor, no params for column.editable() indicate that editor for new row
@@ -761,7 +791,8 @@ class BootstrapTable extends Component {
         columns = [ {
           name: children.props.children,
           field: children.props.dataField,
-          editable: children.props.editable
+          editable: children.props.editable,
+          hiddenOnInsert: children.props.hiddenOnInsert
         } ];
       }
       return (
@@ -909,7 +940,8 @@ BootstrapTable.propTypes = {
     clickToSelect: PropTypes.bool,
     hideSelectColumn: PropTypes.bool,
     clickToSelectAndEditCell: PropTypes.bool,
-    showOnlySelected: PropTypes.bool
+    showOnlySelected: PropTypes.bool,
+    unselectable: PropTypes.array
   }),
   cellEdit: PropTypes.shape({
     mode: PropTypes.string,
@@ -944,10 +976,11 @@ BootstrapTable.propTypes = {
     onRowClick: PropTypes.func,
     page: PropTypes.number,
     pageStartIndex: PropTypes.number,
-    paginationShowsTotal: PropTypes.bool,
+    paginationShowsTotal: PropTypes.oneOfType([ PropTypes.bool, PropTypes.func ]),
     sizePerPageList: PropTypes.array,
     sizePerPage: PropTypes.number,
     paginationSize: PropTypes.number,
+    hideSizePerPage: PropTypes.bool,
     onSortChange: PropTypes.func,
     onPageChange: PropTypes.func,
     onSizePerPageList: PropTypes.func,
@@ -973,7 +1006,8 @@ BootstrapTable.propTypes = {
     dataTotalSize: PropTypes.number
   }),
   exportCSV: PropTypes.bool,
-  csvFileName: PropTypes.string
+  csvFileName: PropTypes.string,
+  ignoreSinglePage: PropTypes.bool
 };
 BootstrapTable.defaultProps = {
   height: '100%',
@@ -993,7 +1027,8 @@ BootstrapTable.defaultProps = {
     clickToSelect: false,
     hideSelectColumn: false,
     clickToSelectAndEditCell: false,
-    showOnlySelected: false
+    showOnlySelected: false,
+    unselectable: []
   },
   cellEdit: {
     mode: Const.CELL_EDIT_NONE,
@@ -1035,6 +1070,7 @@ BootstrapTable.defaultProps = {
     sizePerPageList: Const.SIZE_PER_PAGE_LIST,
     sizePerPage: undefined,
     paginationSize: Const.PAGINATION_SIZE,
+    hideSizePerPage: false,
     onSizePerPageList: undefined,
     noDataText: undefined,
     handleConfirmDeleteRow: undefined,
@@ -1055,7 +1091,8 @@ BootstrapTable.defaultProps = {
     dataTotalSize: 0
   },
   exportCSV: false,
-  csvFileName: 'spreadsheet.csv'
+  csvFileName: 'spreadsheet.csv',
+  ignoreSinglePage: false
 };
 
 export default BootstrapTable;

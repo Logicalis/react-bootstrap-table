@@ -1,3 +1,100 @@
+<a name="v2.3.8"></a>
+# [v2.3.8](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.7...v2.3.8) (2016-07-16)
+## Bug fixes
+* Fix [#550](https://github.com/AllenFang/react-bootstrap-table/issues/550), a unselectable list issues after refresh([5a85f06](https://github.com/AllenFang/react-bootstrap-table/commit/5a85f06a70e3c00d093dfbf574bc50e5d66aa1e2))
+<a name="v2.3.7"></a>
+
+## Enhancement
+* Add ```export``` on ```<TableHeaderColumn>```([aa4dfc3](https://github.com/AllenFang/react-bootstrap-table/commit/aa4dfc36b60de587325816a27c57a5dc2dfc5e89))
+	* You can add ```export={true}``` to tell ```react-bootstra-table``` exporting this column if it is hidden
+	* Also, you can add ```export={false}``` to tell ```react-bootstra-table``` don't export this column
+
+# [v2.3.7](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.6...v2.3.7) (2016-07-02)
+## Bug fixes
+* [#517](https://github.com/AllenFang/react-bootstrap-table/issues/517)([https://github.com/AllenFang/react-bootstrap-table/issues/517](https://github.com/AllenFang/react-bootstrap-table/commit/1c71289e0a6578a5c959ae2232ebda32e8080b10))
+* Fix unselctable is broken on selecting all([aa1db57](https://github.com/AllenFang/react-bootstrap-table/commit/aa1db57c021f43d5cf51ddb5cc11f8647cd46d51))
+* Fix current page not work correct from zero([edd5581](https://github.com/AllenFang/react-bootstrap-table/commit/edd55810d94ca6e0936e57f3430b067ce954ae12))
+
+<a name="v2.3.6"></a>
+# [v2.3.6](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.5...v2.3.6) (2016-06-20)
+### Bug fixes
+* Fix filter null data([8a90468](https://github.com/AllenFang/react-bootstrap-table/commit/8a90468d80fb269612f1599dcaf18cb99dcf65ab))
+* Fix setState will cause changing to page one if selected row is on last page([7093d58](https://github.com/AllenFang/react-bootstrap-table/commit/7093d58aad53454e956b52862fed0a84cdb809bf))
+
+### Features
+* Support ```unselectable``` in ```selectRow``` props which can make some row unselectable([f5faef1](https://github.com/AllenFang/react-bootstrap-table/commit/f5faef1ede68d02bbfb50e424f80d0e2c188ad76))
+	* Check [example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/selection/unselectable-table.js#L25)
+* Expose ```getTableDataIgnorePaging``` function on ```<BootstrapTable>``` to allow user get the all data(include filtered)([34f3568](https://github.com/AllenFang/react-bootstrap-table/commit/34f3568657b1fb56fdc218041d47b00f09680345))
+
+<a name="v2.3.5"></a>
+# [v2.3.5](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.4...v2.3.5) (2016-06-11)
+### Bug fixes
+* Fix column title is null problem([4d25667](https://github.com/AllenFang/react-bootstrap-table/commit/4d25667facf23e6447b8a196d32ffe699e5573a2))
+* Fix sizePerPage always to be options value if setState([58540b3](https://github.com/AllenFang/react-bootstrap-table/commit/58540b37eccc3f15e92950e96dd890043d7fc1a6))
+* fix currPage always to be options value if setState([544cd26](https://github.com/AllenFang/react-bootstrap-table/commit/544cd261b8f1da42173f5cb00dc61f32fa7b04a7))
+
+### Enhancement
+* Support ```headerAlign``` for align header text only([e8930f6](https://github.com/AllenFang/react-bootstrap-table/commit/e8930f63a76fb54bcb4b36e39440ab757619490f))
+	* Check [example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/column/column-align-table.js)
+
+<a name="v2.3.4"></a>
+# [v2.3.4](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.3...v2.3.4) (2016-06-05)
+### Bug fixes
+* Fix a next page showing if there's no data([ddf7fc9](https://github.com/AllenFang/react-bootstrap-table/commit/ddf7fc9614e48ae3bfbd38c5dbc186db78db8fc7))
+* Fix the wrong class on selection row if a ```trClassName``` given([2d3d1cb](https://github.com/AllenFang/react-bootstrap-table/commit/2d3d1cb527ca87de55dd2bfe0cf737395285ef3a))
+	* Check [#488](https://github.com/AllenFang/react-bootstrap-table/issues/488)
+* Fix the save button doesn't work in textarea editing if disable ```blurToSave```([2e0eca5](https://github.com/AllenFang/react-bootstrap-table/commit/2e0eca5a4d326aa6ab2fdc24a1bb50ad60c39ce1))
+
+### Features
+* Able to hide the pagination if there's only one page([4739d43](https://github.com/AllenFang/react-bootstrap-table/commit/4739d433d873fbf0d5ede829ee878ab9965e3e81))
+	* Enable ```ignoreSinglePage``` on ```<BootstrapTable>```
+* Able to hide the sizePerPage doprdown([7c88a3b](https://github.com/AllenFang/react-bootstrap-table/commit/7c88a3bbf83e09810db24d684655071a91207f1a))
+	* Add ```hideSizePerPage``` in ```options``` props on ```<BootstrapTable>```
+* Support to customize the csv header text([ef11be9](https://github.com/AllenFang/react-bootstrap-table/commit/ef11be9e78b419c435bd9bc79a276fdf7e1e8bbe))
+	* Use ```csvHeader``` on ```<TableHeaderColumn>```
+
+### Enhancement
+* Fix confirm grammar for row delete([cd26ba9](https://github.com/AllenFang/react-bootstrap-table/commit/cd26ba98233b43b214a37a9c027d2760dbc5adc8))
+
+<a name="v2.3.3"></a>
+# [v2.3.3](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.2...v2.3.3) (2016-05-29)
+### Bug fixes
+* Fix warning: NaN is an invalid value for the width css style property([4018df5](https://github.com/AllenFang/react-bootstrap-table/commit/4018df53f1c65d8d072b28b52ce71f103a76d81b))
+* Fix uncaught TypeError: Cannot read property 'filter' of undefined([dc67221](https://github.com/AllenFang/react-bootstrap-table/commit/dc672211e32cfd10b83557418bd82c2956d41b3c))
+* Fix search then filter will ignore the search([dc67221](https://github.com/AllenFang/react-bootstrap-table/commit/dc672211e32cfd10b83557418bd82c2956d41b3c))
+
+### Features
+* Custom text for ```paginationShowsTotal```([07b3e7a](https://github.com/AllenFang/react-bootstrap-table/commit/07b3e7a59f1c8cf0b71fbdabdb95410f8d9fb5e0))
+	* ```paginationShowsTotal``` accept a bool value or a function, if a function given you need return the customize JSX.
+	* Check [example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/pagination/custom-pagination-table.js#L43)
+* Support hide field in insert modal([9a7e93a](https://github.com/AllenFang/react-bootstrap-table/commit/9a7e93a7a87783e1405968cfae9970a3d55323c3))
+	* Use ```hiddenOnInsert``` on ```<TableHeaderColumn>```
+
+### Enhancement
+* Ability to return unselected rows in ```onSelectAll```([a23c290](https://github.com/AllenFang/react-bootstrap-table/commit/a23c2902a2ec33ca5f783fce6740892af359e74a))
+	* On select all, the second argument will be the current display rows on table.
+	* On unselect all, the second argument will be the unselect rows.
+	* Check [example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/selection/select-hook-table.js#L34)
+
+* Improve the validation on ```onSelectAll```([4666523](https://github.com/AllenFang/react-bootstrap-table/commit/4666523c4ff87132655810bbdbfa5ef306a8cce8))
+	* If return true/false in ```onSelectAll```, means agree/disard this select all event.
+	* If return an array of rowKeys in ```onSelectAll```, means the final selected result for this select event.
+	* Check [select validation example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/selection/select-validation-table.js)
+
+
+<a name="v2.3.2"></a>
+# [v2.3.2](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.1...v2.3.2) (2016-05-23)
+### Bug fixes
+* Fix sorting on null value([6a1c88b](https://github.com/AllenFang/react-bootstrap-table/commit/6a1c88bbdee921bd6373f713cb16e69676f2cda0))
+
+### Features
+* Support for pagination start index([98499b2](https://github.com/AllenFang/react-bootstrap-table/commit/98499b2d3de0149f27e85a75e753d948e25d32a7))
+	* Use ```pageStartIndex``` in ```options```
+	* Check [example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/pagination/custom-pagination-table.js#L28)
+* Able to add classname on <table> tag([866e07d](https://github.com/AllenFang/react-bootstrap-table/commit/866e07d1fe3932557afcd87addd65c725c9023a5))
+	* ```tableHeaderClass``` for header table and ```tableBodyClass``` for body table
+	* Check [example](https://github.com/AllenFang/react-bootstrap-table/blob/master/examples/js/style/table-class-table.js)
+
 <a name="v2.3.1"></a>
 # [v2.3.1](https://github.com/AllenFang/react-bootstrap-table/compare/v2.3.0...v2.3.1) (2016-05-11)
 ### Bug fixes

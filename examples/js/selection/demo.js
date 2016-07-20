@@ -2,11 +2,13 @@
 import React from 'react';
 import SingleSelectTable from './single-select-table';
 import MultiSelectTable from './multi-select-table';
+import UnSelectableTable from './unselectable-table';
 import ClickToSelectTable from './click-to-select-table';
 import DefaultSelectTable from './default-select-table';
 import SelectBgColorTable from './select-bgcolor-table';
 import SelectHookTable from './select-hook-table';
 import HideSelectionColumnTable from './hide-selection-col-table';
+import SelectValidationTable from './select-validation-table';
 import RowClickTable from './row-click-table';
 import OnlySelectedTable from './only-show-selected-table';
 import ExternallyManagedSelection from './externally-managed-selection';
@@ -30,6 +32,15 @@ class Demo extends React.Component {
             <div className='panel-body'>
               <h5>Source in /examples/js/selection/multi-select-table.js</h5>
               <MultiSelectTable />
+            </div>
+          </div>
+        </div>
+        <div className='col-md-offset-1 col-md-8'>
+          <div className='panel panel-default'>
+            <div className='panel-heading'>UnSelectable Example</div>
+            <div className='panel-body'>
+              <h5>Source in /examples/js/selection/unselectable-table.js</h5>
+              <UnSelectableTable />
             </div>
           </div>
         </div>
@@ -75,6 +86,16 @@ class Demo extends React.Component {
             <div className='panel-body'>
               <h5>Source in /examples/js/selection/hide-selection-col-table.js</h5>
               <HideSelectionColumnTable />
+            </div>
+          </div>
+        </div>
+        <div className='col-md-offset-1 col-md-8'>
+          <div className='panel panel-default'>
+            <div className='panel-heading'>Select Validation Example</div>
+            <div className='panel-body'>
+              <h5>Source in /examples/js/selection/row-click-table.js</h5>
+              <h5>Only able to select the rows which key is less 3.</h5>
+              <SelectValidationTable />
             </div>
           </div>
         </div>

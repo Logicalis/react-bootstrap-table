@@ -27,8 +27,10 @@ class TableBody extends Component {
       'table-condensed': this.props.condensed
     }, this.props.tableBodyClass);
 
+    const unselectable = this.props.selectRow.unselectable || [];
     const isSelectRowDefined = this._isSelectRowDefined();
     const tableHeader = this.renderTableHeader(isSelectRowDefined);
+    const inputType = this.props.selectRow.mode === Const.ROW_SELECT_SINGLE ? 'radio' : 'checkbox';
 
     const tableRows = this.props.data.map(function(data, r) {
       const tableColumns = this.props.columns.map(function(column, i) {
@@ -77,10 +79,10 @@ class TableBody extends Component {
               );
             } else {
               columnChild = formattedValue;
-              columnTitle = column.columnTitle ? formattedValue.toString() : null;
+              columnTitle = column.columnTitle && formattedValue ? formattedValue.toString() : null;
             }
           } else {
-            columnTitle = column.columnTitle ? fieldValue.toString() : null;
+            columnTitle = column.columnTitle && fieldValue ? fieldValue.toString() : null;
           }
           return (
             <TableColumn key={ i }
@@ -114,22 +116,25 @@ class TableBody extends Component {
         );
       }
 
-      const selected = this.props.selectedRowKeys.indexOf(data[this.props.keyField]) !== -1;
+      const key = data[this.props.keyField];
+      const disable = unselectable.indexOf(key) !== -1;
+      const selected = this.props.selectedRowKeys.indexOf(key) !== -1;
       const selectRowColumn = isSelectRowDefined && !this.props.selectRow.hideSelectColumn ?
-                              this.renderSelectRowColumn(selected) : null;
+                              this.renderSelectRowColumn(selected, inputType, disable) : null;
       // add by bluespring for className customize
       let trClassName = this.props.trClassName;
       if (isFun(this.props.trClassName)) {
         trClassName = this.props.trClassName(data, r);
       }
       return (
-        <TableRow isSelected={ selected } key={ r } className={ trClassName }
+        <TableRow isSelected={ selected } key={ key } className={ trClassName }
           selectRow={ isSelectRowDefined ? this.props.selectRow : undefined }
           enableCellEdit={ this.props.cellEdit.mode !== Const.CELL_EDIT_NONE }
           onRowClick={ this.handleRowClick }
           onRowMouseOver={ this.handleRowMouseOver }
           onRowMouseOut={ this.handleRowMouseOut }
-          onSelectRow={ this.handleSelectRow }>
+          onSelectRow={ this.handleSelectRow }
+          unselectableRow={ disable }>
           { selectRowColumn }
           { tableColumns }
         </TableRow>
@@ -180,14 +185,16 @@ class TableBody extends Component {
     }
 
     const theader = this.props.columns.map(function(column, i) {
-      const width = column.width === null ? column.width : parseInt(column.width, 10);
       const style = {
-        display: column.hidden ? 'none' : null,
-        width: width,
-        minWidth: width
+        display: column.hidden ? 'none' : null
+      };
+      if (column.width) {
+        const width = parseInt(column.width, 10);
+        style.width = width;
         /** add min-wdth to fix user assign column width
         not eq offsetWidth in large column table **/
-      };
+        style.minWidth = width;
+      }
       return (<col style={ style } key={ i } className={ column.className }></col>);
     });
 
@@ -271,22 +278,13 @@ class TableBody extends Component {
     }
   }
 
-  renderSelectRowColumn(selected) {
-    if (this.props.selectRow.mode === Const.ROW_SELECT_SINGLE) {
-      return (
-        <TableColumn dataAlign='center'>
-          <input type='radio' checked={ selected }
-            onChange={ this.handleSelectRowColumChange }/>
-        </TableColumn>
-      );
-    } else {
-      return (
-        <TableColumn dataAlign='center'>
-          <input type='checkbox' checked={ selected }
+  renderSelectRowColumn(selected, inputType, disabled) {
+    return (
+      <TableColumn dataAlign='center'>
+        <input type={ inputType } checked={ selected } disabled={ disabled }
           onChange={ this.handleSelectRowColumChange }/>
-        </TableColumn>
-      );
-    }
+      </TableColumn>
+    );
   }
 
   _isSelectRowDefined() {
