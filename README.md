@@ -1,3 +1,13 @@
+---
+
+# WARNING
+
+## This repo has been archived!
+
+NO further developement will be made in the foreseen future.
+
+---
+
 # react-bootstrap-table
 
 [![Join the chat at https://gitter.im/AllenFang/react-bootstrap-table](https://badges.gitter.im/AllenFang/react-bootstrap-table.svg)](https://gitter.im/AllenFang/react-bootstrap-table?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
